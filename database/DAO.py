@@ -14,7 +14,7 @@ class DAO():
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """ select * from nerc n  """
 
         cursor.execute(query)
 
@@ -26,15 +26,16 @@ class DAO():
         return result
 
     @staticmethod
-    def getAllEvents(nerc):
+    def getAllEvents(nerc, maxH):
         conn = DBConnect.get_connection()
 
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """ select * from poweroutages p where p.nerc_id = %s order by p.date_event_began and 
+                    TIMESTAMPDIFF(HOUR, p.date_event_began, p.date_event_finished) < %s """
 
-        cursor.execute(query, (nerc.id,))
+        cursor.execute(query, (nerc, maxH))
 
         for row in cursor:
             result.append(
